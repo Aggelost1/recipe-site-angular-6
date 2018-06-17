@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 import {Recipe} from '../recipe';
 import {RecipeService} from '../recipe.service';
-
+import {ShoppingListService} from '../../shopping-list/shopping-list.service';
 @Component({
   selector: 'recipe-detail',
   templateUrl: 'recipe-detail.component.html',
@@ -13,10 +13,10 @@ import {RecipeService} from '../recipe.service';
 })
 export class RecipeDetailComponent  implements OnInit , OnDestroy{
 
- @Input() selectedRecipe : Recipe;
+ selectedRecipe : Recipe;
  private recipeIndex:number;
  private subscription : Subscription;
- constructor( private router: Router, private activatedroute: ActivatedRoute, private  recipeServise: RecipeService  ){}
+ constructor(private sls: ShoppingListService, private router: Router, private activatedroute: ActivatedRoute, private  recipeServise: RecipeService  ){}
 
  ngOnInit(){
   this.subscription = this.activatedroute.params.subscribe(
@@ -26,6 +26,10 @@ export class RecipeDetailComponent  implements OnInit , OnDestroy{
    }
   );
   
+ }
+ 
+ onAddToShoppingList(){
+  this.sls.addItems(this.selectedRecipe.ingredients)
  }
 
  onEdit(){
