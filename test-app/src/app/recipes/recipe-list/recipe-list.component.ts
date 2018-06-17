@@ -3,7 +3,7 @@ import { Component, OnInit,OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import {Recipe} from '../recipe';
-import {RecipeItemComponent} from './recipe-item.component';
+
 import {RecipeService} from '../recipe.service';
 
 
@@ -26,6 +26,10 @@ export class RecipeListComponent  implements OnInit, OnDestroy{
     this.recipeServise.recipeChanged.subscribe(
       (recipes: Recipe[]) => this.recipes =recipes
     );
+  }
+
+  onSelected(recipe : Recipe){
+      
   }
 
   ngOnDestroy(){
