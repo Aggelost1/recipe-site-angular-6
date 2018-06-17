@@ -1,1 +1,9 @@
-<h2> Hello from SHOPPING-LIST component </h2>
+<div class="row">
+    <div class="col-xs-10">
+      <shopping-list-add [item]='this.selectedItem' (cleared)='onCleared()'></shopping-list-add>
+      <hr>
+      <ul class="list-group">
+        <a class="list-group-item" *ngFor="let item of items" (click)='onSelectItem(item)' >{{item.amount}} of {{item.name}} </a>
+      </ul>
+    </div>
+  </div>
