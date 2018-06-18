@@ -15,17 +15,20 @@ export class HeaderComponent  {
 
   constructor(private recipeService: RecipeService, private authService: AuthService){}
 
- onStore(){
+  onStore(){
+    this.recipeService.storeData().subscribe(
+      data => console.log(data),
+      error => console.log(error)
+    )
+  }
   
- }
+  onFetch(){
+    return this.recipeService.fetchData()
+  }
 
- onFetch(){
-  
- }
-
- isAuth(){
-  return this.authService.isAuthenticated();
- }
+  isAuth(){
+   return this.authService.isAuthenticated();
+  }
 
   onLogout(){
     this.authService.logout();
