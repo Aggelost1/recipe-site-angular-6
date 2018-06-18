@@ -1,5 +1,5 @@
 import {Injectable, EventEmitter} from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 
 
 
@@ -39,5 +39,22 @@ export class RecipeService{
 
   editRecipe(oldRecipe: Recipe ,newRecipe: Recipe){
     this.recipes[this.recipes.indexOf(oldRecipe)] = newRecipe;
+  }
+
+  storeData(){
+    const body= JSON.stringify(this.recipes)
+    const header = new HttpHeaders({
+      'Content-Type' : 'application/json'
+    });
+    return this.http.put('https://recipebook-eca40.firebaseio.com/recipes.json', body, {headers: header})
+  }
+
+  fetchData(){
+     return this.http.get('https://recipebook-eca40.firebaseio.com/recipes.json')
+        .subscribe( ( data : Recipe[] ) =>{
+        this.recipes = data;
+        this.recipeChanged.emit(this.recipes);
+       }
+      )
   }
 }

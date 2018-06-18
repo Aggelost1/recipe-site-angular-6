@@ -23,6 +23,8 @@ import {DropdownDirective} from './core/header/dropdown.directive';
 import {RecipeService} from './recipes/recipe.service';
 import { ShoppingListService } from './shopping-list/shopping-list.service';
 import {FormsModule} from '@angular/forms';
+import { AuthService } from './shared/auth.service';
+import { AuthGuard } from './shared/auth.guard';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,7 @@ import {FormsModule} from '@angular/forms';
     FormsModule
   ],
 
-  providers: [RecipeService,ShoppingListService],
+  providers: [RecipeService, ShoppingListService, AuthService, AuthGuard],
 
   bootstrap: [AppComponent]
 })
