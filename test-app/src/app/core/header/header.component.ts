@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+import {RecipeService} from '../../recipes/recipe.service'
+
+import {AuthService} from "../../shared/auth.service"
 
 
 
@@ -10,7 +13,7 @@ import { Component } from '@angular/core';
   })
 export class HeaderComponent  {
 
- 
+  constructor(private recipeService: RecipeService, private authService: AuthService){}
 
  onStore(){
   
@@ -21,11 +24,12 @@ export class HeaderComponent  {
  }
 
  isAuth(){
-  
+  return this.authService.isAuthenticated();
  }
 
   onLogout(){
-    
+    this.authService.logout();
   }
+
 
 }
