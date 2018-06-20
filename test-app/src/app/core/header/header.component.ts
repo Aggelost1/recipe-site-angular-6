@@ -1,7 +1,7 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { RecipeService } from '../../recipes/recipe.service'
-
 import { AuthService } from "../../shared/auth.service"
 
 
@@ -11,16 +11,21 @@ import { AuthService } from "../../shared/auth.service"
     selector: 'header',
     templateUrl: './header.component.html'
 })
-export class HeaderComponent  {
-    //public isAuthenticated: boolean;
+export class HeaderComponent  implements OnInit{
+    private subscription : Subscription;
+    public isSignedin: boolean =false;
 
     constructor(private recipeService: RecipeService, private authService: AuthService) {
 
     }
 
-    // ngOnChanges() {
-    //     this.isAuthenticated = this.authService.isAuthenticated();
-    // }
+    ngOnInit() {
+        this.isSignedin = this.authService.isAuthenticated();
+        this.subscription=
+        this.authService.authChangedTo.subscribe(
+          (isAuthenticated: boolean) => this.isSignedin = isAuthenticated
+        );
+    }
 
     onStore() {
         this.recipeService.storeData().subscribe(
@@ -33,9 +38,9 @@ export class HeaderComponent  {
         return this.recipeService.fetchData()
     }
 
-    isAuth(){
-     return this.authService.isAuthenticated();
-    }
+    // isAuth(){
+    //  return this.authService.isAuthenticated();
+    // }
 
     onLogout() {
         this.authService.logout();

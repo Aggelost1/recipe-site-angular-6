@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, EventEmitter} from "@angular/core";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs"
 
@@ -17,6 +17,7 @@ export class AuthService{
   constructor(private router: Router, private afAuth: AngularFireAuth){}
   user: Observable<firebase.User>;
   public currentUser: firebase.User;
+  authChangedTo = new EventEmitter<boolean>();
   
   signupUser(user:User){
     this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password).catch(function(error) {
@@ -34,19 +35,22 @@ export class AuthService{
       .then( (resp) => {
         this.currentUser = resp.user
         localStorage.setItem('userStored', JSON.stringify(resp.user));
+        this.authChangedTo.emit(true);
+        console.log(resp,'signedin');
+        this.router.navigate(['/recipes']);
       })
       .catch( (error) => {
         console.log(error);
       });
-    // this.currentUser =  this.afAuth.auth.currentUser;
-    // console.log('signedin',this.currentUser);
-    // localStorage.setItem('userStored', JSON.stringify(this.currentUser));
+
   }
 
   logout(){
     this.afAuth.auth.signOut().then(() => {
       this.router.navigate(['/signin']);
+      this.authChangedTo.emit(false);
    });
+  
    localStorage.removeItem('userStored');
   }
 
@@ -74,4 +78,5 @@ export class AuthService{
     
   }
 
+  
 }
