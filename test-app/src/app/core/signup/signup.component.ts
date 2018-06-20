@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
+import {Router} from "@angular/router";
 
 import {AuthService} from '../../shared/auth.service';
 
@@ -16,11 +17,12 @@ export class SignupComponent implements OnInit {
     error = false;
     errorMessage = '';
 
-    constructor(private fb: FormBuilder, private authService: AuthService) {
+    constructor(private fb: FormBuilder, private authService: AuthService,private router : Router) {
     }
 
     onSignup() {
         this.authService.signupUser(this.myForm.value)
+        this.router.navigate(['/recipes']);
     }
 
     ngOnInit(): any {
