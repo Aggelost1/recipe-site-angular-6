@@ -3,20 +3,21 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import {  ReactiveFormsModule } from '@angular/forms';
 
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { environment } from '../environments/environment';
+
+
+import{ShoppingListModule} from './shopping-list/shopping-list.module';
+
 import {routing} from './app.routes'
 
 import { AppComponent } from './app.component';
-import {ShoppingListComponent} from './shopping-list/shopping-list.component';
-import {RecipesComponent} from './recipes/recipes.component';
 import {SigninComponent} from './core/signin/signin.component';
 import {SignupComponent} from './core/signup/signup.component';
-import {RecipeItemComponent} from './recipes/recipe-list/recipe-item.component';
-import {RecipeListComponent} from './recipes/recipe-list/recipe-list.component';
-import {RecipeDetailComponent} from './recipes/recipe-detail/recipe-detail.component';
-import {RecipeEditComponent} from './recipes/recipe-edit/recipe-edit.component';
 import {HeaderComponent} from './core/header/header.component';
-import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
-import { ShoppingListAddComponent } from './shopping-list/shopping-list-add.component';
+
 
 import {DropdownDirective} from './core/header/dropdown.directive';
 
@@ -29,29 +30,24 @@ import { AuthGuard } from './shared/auth.guard';
 @NgModule({
   declarations: [
     AppComponent,
-    ShoppingListComponent,
-    RecipesComponent,
     SigninComponent,
-    SignupComponent,
-    RecipeItemComponent,    
-    RecipeDetailComponent,
-    RecipeEditComponent,
-    RecipeStartComponent,
+    SignupComponent,    
     HeaderComponent,
-    DropdownDirective,
-    RecipeListComponent,
-    ShoppingListAddComponent
-  ],
+    DropdownDirective
+     ],
 
   imports: [
     BrowserModule,
     routing,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    ShoppingListModule
   ],
 
-  providers: [RecipeService, ShoppingListService, AuthService, AuthGuard],
+  providers: [RecipeService, ShoppingListService, AuthService, AuthGuard,AngularFireAuth],
 
   bootstrap: [AppComponent]
 })

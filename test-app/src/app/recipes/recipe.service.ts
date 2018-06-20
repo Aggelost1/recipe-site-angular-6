@@ -9,7 +9,7 @@ import {Ingredient} from '../shared/ingredient'
 @Injectable()
 export class RecipeService{
 
- recipeChanged = new EventEmitter<Recipe[]>();
+  recipeChanged = new EventEmitter<Recipe[]>();
  
 
   private recipes: Recipe[] = [
