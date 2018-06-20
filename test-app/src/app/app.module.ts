@@ -3,6 +3,12 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import {  ReactiveFormsModule } from '@angular/forms';
 
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { environment } from '../environments/environment';
+
+
 import{ShoppingListModule} from './shopping-list/shopping-list.module';
 
 import {routing} from './app.routes'
@@ -36,10 +42,12 @@ import { AuthGuard } from './shared/auth.guard';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     ShoppingListModule
   ],
 
-  providers: [RecipeService, ShoppingListService, AuthService, AuthGuard],
+  providers: [RecipeService, ShoppingListService, AuthService, AuthGuard,AngularFireAuth],
 
   bootstrap: [AppComponent]
 })
