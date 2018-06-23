@@ -28,6 +28,8 @@ import { ShoppingListService } from './shopping-list/shopping-list.service';
 import {FormsModule} from '@angular/forms';
 import { AuthService } from './shared/auth.service';
 import { AuthGuard } from './shared/auth.guard';
+import { SharedModule } from './shared/shared-module/shared.module';
+import { MyRecipesComponent } from './my-recipes/my-recipes.component';
 
 
 
@@ -37,6 +39,7 @@ import { AuthGuard } from './shared/auth.guard';
     SigninComponent,
     SignupComponent,    
     HeaderComponent,
+    MyRecipesComponent,
     DropdownDirective
      ],
 
@@ -49,6 +52,7 @@ import { AuthGuard } from './shared/auth.guard';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     ShoppingListModule,
+    SharedModule
   ],
 
   providers: [RecipeService, ShoppingListService, AuthService, AuthGuard,AngularFireAuth],

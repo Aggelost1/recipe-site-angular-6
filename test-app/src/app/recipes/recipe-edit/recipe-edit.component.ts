@@ -23,7 +23,7 @@ export class RecipeEditComponent implements OnInit ,OnDestroy {
  private subscription2 :Subscription;
  private recipe :Recipe;
  private recipeId: string ;
- private isNew=false;
+ private isNew=true;
 
  constructor(
     private activatedroute: ActivatedRoute, 
@@ -33,6 +33,7 @@ export class RecipeEditComponent implements OnInit ,OnDestroy {
   ){}
 
   ngOnInit(){
+   this.setEmptyRecipeForm();
    this.subscription1 = this.activatedroute.params.subscribe(
      (params: any) => {
         if (params.hasOwnProperty('id')) {
@@ -43,8 +44,10 @@ export class RecipeEditComponent implements OnInit ,OnDestroy {
            (recipe: Recipe) => {
              this.recipe = recipe;
              console.log(recipe);
+             this.InitForm();
            });
-         this.InitForm()
+           this.isNew = false;
+         
         } else {
          this.isNew = true;
          this.recipe = null;
@@ -96,45 +99,6 @@ export class RecipeEditComponent implements OnInit ,OnDestroy {
 }
 
   
-  // private InitForm() {
-  //   let recipeName = '';
-  //   let recipeImageUrl = '';
-  //   let recipeContent = '';
-  //   const recipeIngredients: FormArray = new FormArray([]);
-
-  //   if (!this.isNew) {
-      
-  //     recipeName = this.recipe.name;
-  //     console.log("old recipe in initform",recipeName);
-  //     recipeImageUrl = this.recipe.imagePath;
-  //     recipeContent = this.recipe.description;
-  //    if (this.recipe.hasOwnProperty('ingredients')){
-  //       for (let i=0; i<this.recipe.ingredients.length; i++) {
-  //         recipeIngredients.push(
-  //           new FormGroup({
-  //            name: new FormControl(this.recipe.ingredients[i].name, Validators.required),
-  //             amount: new FormControl(
-  //               this.recipe.ingredients[i].amount, [
-  //                 Validators.required,
-  //                 Validators.pattern('\\d+')
-  //               ]
-  //             )
-  //          })
-  //         );
-  //       }
-  //    }
-  //   }else{console.log("new recipe in init")}
-
-  //   this.recipeForm = this.formBuilder.group({
-  //     name: [recipeName, Validators.required],
-  //     imagePath: [recipeImageUrl, Validators.required],
-  //     description: [recipeContent, Validators.required],
-  //     ingredients: recipeIngredients
-  //   });
-    
-  // }
-      
-  
   private InitForm() {
     let recipeName = '';
     let recipeImageUrl = '';
@@ -142,21 +106,27 @@ export class RecipeEditComponent implements OnInit ,OnDestroy {
     const recipeIngredients: FormArray = new FormArray([]);
 
     if (!this.isNew) {
-      for (let i = 0; i < this.recipe.ingredients.length; i++) {
-        recipeIngredients.push(
-          new FormGroup({
-            name: new FormControl(this.recipe.ingredients[i].name, Validators.required),
-            amount: new FormControl(this.recipe.ingredients[i].amount, [
-              Validators.required,
-              Validators.pattern('\\d+')
-            ])
-          })
-        );
-      }
+      
       recipeName = this.recipe.name;
+      console.log("old recipe in initform",recipeName);
       recipeImageUrl = this.recipe.imagePath;
       recipeContent = this.recipe.description;
-    }
+     if (this.recipe.hasOwnProperty('ingredients')){
+        for (let i=0; i<this.recipe.ingredients.length; i++) {
+          recipeIngredients.push(
+            new FormGroup({
+             name: new FormControl(this.recipe.ingredients[i].name, Validators.required),
+              amount: new FormControl(
+                this.recipe.ingredients[i].amount, [
+                  Validators.required,
+                  Validators.pattern('\\d+')
+                ]
+              )
+           })
+          );
+        }
+     }
+    }else{console.log("new recipe in init")}
 
     this.recipeForm = this.formBuilder.group({
       name: [recipeName, Validators.required],
@@ -164,8 +134,11 @@ export class RecipeEditComponent implements OnInit ,OnDestroy {
       description: [recipeContent, Validators.required],
       ingredients: recipeIngredients
     });
+    
   }
-
+      
+  
+ 
   private setEmptyRecipeForm() {
     const recipeName = '';
     const recipeImageUrl = '';
