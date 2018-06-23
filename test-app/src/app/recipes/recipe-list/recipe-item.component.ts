@@ -8,7 +8,8 @@ import {Recipe} from '../recipe';
 })
 export class RecipeItemComponent  {
  @Input() recipe: Recipe;
- @Input() recipeId: number;
+ @Input() recipeId: string;
+  
 
  
 }

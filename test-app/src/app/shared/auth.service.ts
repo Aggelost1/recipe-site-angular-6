@@ -33,10 +33,9 @@ export class AuthService{
   signinUser(user:User){
     this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)
       .then( (resp) => {
-        this.currentUser = resp.user
         localStorage.setItem('userStored', JSON.stringify(resp.user));
         this.authChangedTo.emit(true);
-        console.log(resp,'signedin');
+        
         this.router.navigate(['/recipes']);
       })
       .catch( (error) => {
@@ -56,8 +55,7 @@ export class AuthService{
 
   isAuthenticated():  boolean {
       this.currentUser =JSON.parse(localStorage.getItem('userStored'));
-      if (this.currentUser){
-        console.log('stored');
+      if (this.currentUser){        
         return true;
       }
       if(this.currentUser){
@@ -78,5 +76,12 @@ export class AuthService{
     
   }
 
-  
+  getUserId(){
+    this.currentUser =JSON.parse(localStorage.getItem('userStored'));
+    if (this.currentUser) {      
+      return this.currentUser.uid;
+    }
+    console.log("no getuser stored")
+    return 'noUserStored';
+  }
 }
