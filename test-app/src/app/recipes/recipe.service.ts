@@ -1,6 +1,5 @@
-import {Injectable, EventEmitter, OnInit, OnDestroy} from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
-import { map, filter, catchError, mergeMap } from 'rxjs/operators';
+import {Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 import {
   AngularFirestore,
@@ -11,7 +10,6 @@ import {
 
 
 import {Recipe} from './recipe';
-import {Ingredient} from '../shared/ingredient'
 import { AuthService } from '../shared/auth.service';
 
 @Injectable()
@@ -26,7 +24,7 @@ export class RecipeService {
   private usersRecipesRef: AngularFirestoreCollection<string>;
   private userIdRef: AngularFirestoreDocument<string>;
   private userRecipeCollectionRef : AngularFirestoreCollection<Recipe>;
-  private userRecipeRef: AngularFirestoreDocument<Recipe>;
+  // private userRecipeRef: AngularFirestoreDocument<Recipe>;
   private userRecipes: Observable<Recipe[]>;
 
   // private recipes: Recipe[] = [
@@ -34,14 +32,15 @@ export class RecipeService {
   //   new Recipe('Summer Salad', 'Okayish', 'https://images.food52.com/7FFORb201wZCsvICN9-S4PWHBow=/753x502/98fb0348-7340-4e7c-9e02-9b50038605fb--2015-0804_watermelon-arugula-and-pickled-onion-summer-salad_bobbi-lin_6046.jpg', [])
   // ];
   
-  constructor(private http : HttpClient, private afs: AngularFirestore, private authService: AuthService ) {
+  constructor( private afs: AngularFirestore, private authService: AuthService ) {
     this.recipesRef = this.afs.collection('recipes');
 
     this.subscription=
-    this.authService.authChangedTo.subscribe(
-      (signedin : boolean ) => {        
+    this.authService.authChecked.subscribe(
+      ( ) => {        
         this.usersRecipesRef = this.afs.collection('usersIdCollection');
         this.userIdRef = this.usersRecipesRef.doc(this.authService.getUserId());
+        console.log(this.authService.getUserId(),"recipe service constractor");
         this.userRecipeCollectionRef =this.userIdRef.collection('recipes');
         this.userRecipes = this.userRecipeCollectionRef.snapshotChanges()
         .pipe(
@@ -94,14 +93,6 @@ export class RecipeService {
   editRecipe(oldRecipeId: string ,newRecipe: Recipe){
     this.recipesRef.doc(oldRecipeId).update(newRecipe)
   }
-
-  // storeData(){
-  //   const body= JSON.stringify(this.recipes)
-  //   const header = new HttpHeaders({
-  //     'Content-Type' : 'application/json'
-  //   });
-  //   return this.http.put('https://recipebook-eca40.firebaseio.com/recipes.json', body, {headers: header})
-  // }
 
   fetchData(){
     return this.newRecipes;

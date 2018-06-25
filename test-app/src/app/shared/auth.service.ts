@@ -11,13 +11,17 @@ import { User} from "./user.interface";
 
 
 
+
 @Injectable()
 export class AuthService{
  // authState: FirebaseAuthState = null;
-  constructor(private router: Router, private afAuth: AngularFireAuth){}
   user: Observable<firebase.User>;
   public currentUser: firebase.User;
   authChangedTo = new EventEmitter<boolean>();
+  authChecked = new EventEmitter<void>();
+
+  constructor(private router: Router, private afAuth: AngularFireAuth){}
+  
   
   signupUser(user:User){
     this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password).catch(function(error) {
@@ -54,15 +58,14 @@ export class AuthService{
   }
 
   isAuthenticated():  boolean {
-      this.currentUser =JSON.parse(localStorage.getItem('userStored'));
-      if (this.currentUser){        
-        return true;
-      }
-      if(this.currentUser){
-        console.log("requested authorized");
+      this.currentUser=JSON.parse(localStorage.getItem('userStored'));
+      if (this.currentUser){
+        console.log(this.currentUser.uid);  
+        this.authChecked.emit();      
         return true;
       }else{
         console.log("not authorized",this.currentUser);
+        this.authChecked.emit(); 
         return false;
       }
      /* this.user =  this.afAuth.auth.currentUser;
@@ -78,7 +81,8 @@ export class AuthService{
 
   getUserId(){
     this.currentUser =JSON.parse(localStorage.getItem('userStored'));
-    if (this.currentUser) {      
+    if (this.currentUser) {    
+      console.log("current user stored ", this.currentUser.uid);  
       return this.currentUser.uid;
     }
     console.log("no getuser stored")
