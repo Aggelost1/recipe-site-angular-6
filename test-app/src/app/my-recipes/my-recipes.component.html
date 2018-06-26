@@ -1,0 +1,11 @@
+
+ 
+  <div class="row">
+    <div class="col-xs-12">
+      <ul class="list-group">
+        
+        <shared-recipe-item *ngFor="let recipe of recipes | async; let i=index " [recipe]="recipe" [recipeId]="recipe.id" class="list-group-item clearfix"></shared-recipe-item>
+        
+      </ul>   
+    </div>
+  </div>

@@ -11,13 +11,17 @@ import { User} from "./user.interface";
 
 
 
+
 @Injectable()
 export class AuthService{
  // authState: FirebaseAuthState = null;
-  constructor(private router: Router, private afAuth: AngularFireAuth){}
   user: Observable<firebase.User>;
   public currentUser: firebase.User;
   authChangedTo = new EventEmitter<boolean>();
+  authChecked = new EventEmitter<void>();
+
+  constructor(private router: Router, private afAuth: AngularFireAuth){}
+  
   
   signupUser(user:User){
     this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password).catch(function(error) {
@@ -33,10 +37,9 @@ export class AuthService{
   signinUser(user:User){
     this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)
       .then( (resp) => {
-        this.currentUser = resp.user
         localStorage.setItem('userStored', JSON.stringify(resp.user));
         this.authChangedTo.emit(true);
-        console.log(resp,'signedin');
+        
         this.router.navigate(['/recipes']);
       })
       .catch( (error) => {
@@ -55,16 +58,14 @@ export class AuthService{
   }
 
   isAuthenticated():  boolean {
-      this.currentUser =JSON.parse(localStorage.getItem('userStored'));
+      this.currentUser=JSON.parse(localStorage.getItem('userStored'));
       if (this.currentUser){
-        console.log('stored');
-        return true;
-      }
-      if(this.currentUser){
-        console.log("requested authorized");
+        console.log(this.currentUser.uid);  
+        this.authChecked.emit();      
         return true;
       }else{
         console.log("not authorized",this.currentUser);
+        this.authChecked.emit(); 
         return false;
       }
      /* this.user =  this.afAuth.auth.currentUser;
@@ -78,5 +79,13 @@ export class AuthService{
     
   }
 
-  
+  getUserId(){
+    this.currentUser =JSON.parse(localStorage.getItem('userStored'));
+    if (this.currentUser) {    
+      console.log("current user stored ", this.currentUser.uid);  
+      return this.currentUser.uid;
+    }
+    console.log("no getuser stored")
+    return 'noUserStored';
+  }
 }

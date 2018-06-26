@@ -11,6 +11,8 @@ import { environment } from '../environments/environment';
 
 import{ShoppingListModule} from './shopping-list/shopping-list.module';
 
+
+
 import {routing} from './app.routes'
 
 import { AppComponent } from './app.component';
@@ -26,6 +28,10 @@ import { ShoppingListService } from './shopping-list/shopping-list.service';
 import {FormsModule} from '@angular/forms';
 import { AuthService } from './shared/auth.service';
 import { AuthGuard } from './shared/auth.guard';
+import { SharedModule } from './shared/shared-module/shared.module';
+import { MyRecipesComponent } from './my-recipes/my-recipes.component';
+
+
 
 @NgModule({
   declarations: [
@@ -33,6 +39,7 @@ import { AuthGuard } from './shared/auth.guard';
     SigninComponent,
     SignupComponent,    
     HeaderComponent,
+    MyRecipesComponent,
     DropdownDirective
      ],
 
@@ -44,7 +51,8 @@ import { AuthGuard } from './shared/auth.guard';
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    ShoppingListModule
+    ShoppingListModule,
+    SharedModule
   ],
 
   providers: [RecipeService, ShoppingListService, AuthService, AuthGuard,AngularFireAuth],
