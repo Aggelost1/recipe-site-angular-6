@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-xs-12">
           <ul class="list-group">
-            <recipe-item *ngFor="let recipe of recipes; let i=index " [recipe]="recipe" [recipeId]="i"  ></recipe-item>
+            <recipe-item *ngFor="let recipe of recipes | async; let i=index " [recipe]="recipe" [recipeId]="recipe.id"  ></recipe-item>
           </ul>
         </div>
       </div>
